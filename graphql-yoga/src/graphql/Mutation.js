@@ -1,4 +1,5 @@
 import Movie from "../models/Movie.js";
+import User from "../models/User.js";
 
 const Mutation = {
 
@@ -14,6 +15,11 @@ const Mutation = {
     async deleteMovie(_, {_id}){
         await Movie.findByIdAndDelete( _id );
         return await Movie.find();
+    },
+    async createUser( _, { email, password } ) {
+        const newUser = { email, password };
+        const user = await User.create( newUser );
+        return await User.find();
     },
 }
 

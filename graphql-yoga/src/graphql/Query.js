@@ -1,4 +1,5 @@
 import Movie from "../models/Movie.js"
+import User from "../models/User.js"
 
 const Query = {
 
@@ -8,8 +9,13 @@ const Query = {
     },
     async getMovieByTitle( _, { title } ) {
         const searchMovieByTitle = await Movie.find( { title : title } );
-        // console.log( 'getting movie', searchMovieByTitle ); 
+        console.log( 'getting movie', searchMovieByTitle ); 
         return searchMovieByTitle 
+    },
+    async login(_,{email,password} ) {
+        const verifyUser = await User.findOne( { email, password } ); //[]
+        console.log(verifyUser)
+        return verifyUser
     },
 }
 

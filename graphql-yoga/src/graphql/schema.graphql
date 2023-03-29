@@ -1,12 +1,12 @@
 type Query {
   getMovies:[Movie]
+  getMovieByTitle(title: String): [Movie] 
 }
 
 type Mutation {
   createMovie(title:String, description:String, likes:Int, image:String, date_of_released:Int): [Movie]
   updateMovie(_id: ID, title:String, description:String, likes:Int, image:String, date_of_released:Int): Movie
-  #Delete
-  #Find By name
+  deleteMovie(_id:ID): [Movie]
 }
 
 type Movie {

@@ -13,3 +13,15 @@ mutation createMovie($title:String, $description:String, $likes:Int, $image:Stri
     }
 }
 `
+export const REMOVE_MOVIE = gql`
+mutation deleteMovie($_id:ID){
+    deleteMovie(_id: $_id){
+	    _id
+        title
+        description
+        likes
+        image
+        date_of_released  
+    }
+}
+`

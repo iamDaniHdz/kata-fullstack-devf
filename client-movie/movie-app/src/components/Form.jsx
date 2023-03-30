@@ -1,17 +1,37 @@
 import React,{useState, useEffect} from "react";
 import { CREATE_MOVIE } from "../graphql/Mutations";
 import { useMutation } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const Form = () => {
 	const navigate = useNavigate()
+	const location = useLocation();
+	console.log( 'movie info', location.state )
+
 	const [title, setTitle] = useState( "" );
 	const [description, setDescription] = useState( "" )
 	const [likes, setLikes] = useState( "" )
 	const [image, setImage] = useState( "" );
 	const [date_of_released, setDateOfReleased] = useState( "" );
 
+	const currentState = location.state;
+	const movieTitle = currentState && currentState !== undefined ?  currentState.title : title ;
+	const movieDescription = currentState && currentState !== undefined ? currentState.description : description;
+	const movieLikes = currentState && currentState !== undefined ? currentState.likes : likes;
+	const movieImage = currentState && currentState !== undefined ? currentState.image : image;
+	const movieDateOfReleased = currentState && currentState !== undefined ? currentState.date_of_released : date_of_released;
+
 	const [createMovie] = useMutation(CREATE_MOVIE, {})
+
+	useEffect( () => {
+		if ( currentState ) {
+			setTitle( movieTitle )
+			setDescription( movieDescription )
+			setLikes( movieLikes )
+			setImage(movieImage)
+			setDateOfReleased(movieDateOfReleased)
+	 	}
+	}, [])
 
 	return (
 		<form onSubmit={async ( event ) => {
@@ -37,8 +57,8 @@ export const Form = () => {
 						setTitle(event.target.value)
 					}}
 					id="title"
+					value={title}
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-
 					required
 				/>
 			</div>
@@ -56,6 +76,7 @@ export const Form = () => {
 						setDescription(event.target.value)
 					}}
 					id="description"
+					value={description}
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required
 				/>
@@ -74,6 +95,7 @@ export const Form = () => {
 						setLikes(event.target.value)
 					}}
 					id="likes"
+					value={likes}
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required
 				/>
@@ -92,6 +114,7 @@ export const Form = () => {
 						setImage(event.target.value)
 					}}
 					id="image"
+					value={image}
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required
 				/>
@@ -110,6 +133,7 @@ export const Form = () => {
 						setDateOfReleased(event.target.value)
 					}}
 					id="date_of_released"
+					value={date_of_released}
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required
 				/>

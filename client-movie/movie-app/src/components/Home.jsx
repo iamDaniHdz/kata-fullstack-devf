@@ -5,7 +5,8 @@ import { GET_MOVIES } from "../graphql/Queries";
 export const Home = () => {
     const [searchMovie, { data, error }] = useLazyQuery(GET_MOVIES);
 
-	useEffect(() => {
+	useEffect( () => {
+		console.log('use effect in home')
 		searchMovie();
 	}, []);
 

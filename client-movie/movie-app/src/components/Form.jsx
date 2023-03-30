@@ -1,8 +1,29 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
+import { CREATE_MOVIE } from "../graphql/Mutations";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
 export const Form = () => {
+	const navigate = useNavigate()
+	const [title, setTitle] = useState( "" );
+	const [description, setDescription] = useState( "" )
+	const [likes, setLikes] = useState( "" )
+	const [image, setImage] = useState( "" );
+	const [date_of_released, setDateOfReleased] = useState( "" );
+
+	const [createMovie] = useMutation(CREATE_MOVIE, {})
+
 	return (
-		<form>
+		<form onSubmit={async ( event ) => {
+			event.preventDefault()
+
+			await createMovie( {
+			   variables : {title,description,likes,image,date_of_released}
+		   	})
+
+          	navigate('/home')
+		}}
+		>
 			<div className="mb-6">
 				<label
 					htmlFor="title"
@@ -12,6 +33,9 @@ export const Form = () => {
 				</label>
 				<input
 					type="text"
+					onChange={(event) => {
+						setTitle(event.target.value)
+					}}
 					id="title"
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 
@@ -28,6 +52,9 @@ export const Form = () => {
 				</label>
 				<input
 					type="text"
+					onChange={(event) => {
+						setDescription(event.target.value)
+					}}
 					id="description"
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required
@@ -43,6 +70,9 @@ export const Form = () => {
 				</label>
 				<input
 					type="number"
+					onChange={(event) => {
+						setLikes(event.target.value)
+					}}
 					id="likes"
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required
@@ -58,6 +88,9 @@ export const Form = () => {
 				</label>
 				<input
 					type="text"
+					onChange={(event) => {
+						setImage(event.target.value)
+					}}
 					id="image"
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required
@@ -73,6 +106,9 @@ export const Form = () => {
 				</label>
 				<input
 					type="number"
+					onChange={(event) => {
+						setDateOfReleased(event.target.value)
+					}}
 					id="date_of_released"
 					className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					required

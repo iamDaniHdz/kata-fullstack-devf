@@ -24,3 +24,16 @@ export const LOGIN =  gql`
     }
 
 `
+
+export const GET_MOVIE_BY_TITLE = gql`
+query getMovieByTitle($title:String){
+    getMovieByTitle(title: $title){
+        _id
+        title
+        description
+        likes
+        image
+        date_of_released        
+    }
+}
+`

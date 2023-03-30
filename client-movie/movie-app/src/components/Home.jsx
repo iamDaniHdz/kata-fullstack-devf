@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_MOVIES } from "../graphql/Queries";
 import { REMOVE_MOVIE } from "../graphql/Mutations";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userState } from "../config/UserState";
 
 export const Home = () => {
+	const navigate = useNavigate()
     const [searchMovie, { data, error }] = useLazyQuery(GET_MOVIES);
 	const verifySession = userState((state) => state.session);
 	console.log("session from home", verifySession);
@@ -15,7 +16,7 @@ export const Home = () => {
 	})
 
 	useEffect( () => {
-		console.log('use effect in home')
+		if ( !verifySession.isValid ) return navigate( '/' )
 		searchMovie();
 	}, []);
 

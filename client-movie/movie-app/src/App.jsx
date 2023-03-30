@@ -5,6 +5,7 @@ import { Navbar } from "./components/Navbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Form } from "./components/Form";
 import { Login } from "./components/Login";
+import { MovieSubList } from "./components/MovieSublist";
 
 function App() {
   const client = new ApolloClient({
@@ -20,6 +21,7 @@ function App() {
 					<Route path="/home" element={<Home />} />
 					<Route path="/create-movie" element={<Form />} />
 					<Route index element={<Login />} />
+					<Route path="/movie" element={<MovieSubList />} />
 				</Routes>
 			</ApolloProvider>
 		</Router>

@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from "react";
 import { CREATE_MOVIE } from "../graphql/Mutations";
+import { UPDATE_MOVIE } from "../graphql/Mutations";
 import { useMutation } from "@apollo/client";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -8,6 +9,7 @@ export const Form = () => {
 	const location = useLocation();
 	console.log( 'movie info', location.state )
 
+	const [_id, setId] = useState( "" );
 	const [title, setTitle] = useState( "" );
 	const [description, setDescription] = useState( "" )
 	const [likes, setLikes] = useState( "" )
@@ -15,6 +17,7 @@ export const Form = () => {
 	const [date_of_released, setDateOfReleased] = useState( "" );
 
 	const currentState = location.state;
+	const movieId = currentState && currentState !== undefined ? currentState._id : _id
 	const movieTitle = currentState && currentState !== undefined ?  currentState.title : title ;
 	const movieDescription = currentState && currentState !== undefined ? currentState.description : description;
 	const movieLikes = currentState && currentState !== undefined ? currentState.likes : likes;
@@ -22,9 +25,11 @@ export const Form = () => {
 	const movieDateOfReleased = currentState && currentState !== undefined ? currentState.date_of_released : date_of_released;
 
 	const [createMovie] = useMutation(CREATE_MOVIE, {})
+	const [updateMovie] = useMutation(UPDATE_MOVIE, {})
 
 	useEffect( () => {
 		if ( currentState ) {
+			setId(movieId)
 			setTitle( movieTitle )
 			setDescription( movieDescription )
 			setLikes( movieLikes )
@@ -36,11 +41,17 @@ export const Form = () => {
 	return (
 		<form onSubmit={async ( event ) => {
 			event.preventDefault()
-
-			await createMovie( {
-			   variables : {title,description,likes,image,date_of_released}
-		   	})
-
+			
+			if ( currentState ) {
+				console.log("Actualizar");
+				await updateMovie({variables: {_id,title,description,likes,image,date_of_released}})
+			} else {
+				console.log("Crear");
+				await createMovie( {
+					variables : {title,description,likes,image,date_of_released}
+				})
+			}
+			
           	navigate('/home')
 		}}
 		>
@@ -143,7 +154,7 @@ export const Form = () => {
 				type="submit"
 				className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 			>
-				Add Movie
+				{currentState ? "Update Movie" : "Add Movie"}
 			</button>
 		</form>
 	);

@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { LOGIN } from "../graphql/Queries";
 import { useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
+import {userState} from "../config/UserState"
 
 export const Login = () => {
 
     const navigate = useNavigate()
     const [email, setEmail] = useState( "" );
     const [password, setPassword] = useState( "" );
-    const [isInvalid, setIsInvalid] = useState("")
-
+    const [isInvalid, setIsInvalid] = useState("");
+    const setUserSession =  userState( (state) => state.addSession)
+    const verifySession = userState( ( state ) => state.session )
+    console.log(verifySession)
+    
     const [login, { data, error }] = useLazyQuery( LOGIN, {
         variables : {email,password}
     })
@@ -25,6 +29,7 @@ export const Login = () => {
 
                     if ( data ) {
                         navigate( '/home' )
+                        setUserSession({isValid : true})
                     } else {
                         setIsInvalid('Invalid Credential!!')
                     }
